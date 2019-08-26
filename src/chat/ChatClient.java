@@ -21,12 +21,22 @@ public class ChatClient {
 			socket.connect(new InetSocketAddress(SERVER_IP,SERVER_PORT));
 			BufferedReader br =new BufferedReader(new InputStreamReader(socket.getInputStream(),"UTF-8"));
 			PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(),"UTF-8"),true);
+			//join 프로토콜 
 			System.out.print("닉 네임>>");
 			String nickname = sc.nextLine();
 			pw.println("join:"+nickname);
 			pw.flush();
+			new ChatClientThread(socket,br).start();
 			while(true) {
-				new ChatClientThread(socket).start();
+				System.out.print(">>");
+				String input = sc.nextLine();
+				if("quit".equals(input)) {
+					pw.println("quit:");
+					break;
+				}else {
+					pw.println("message:"+input);
+					new ChatClientThread(socket,br).start();
+				}
 			}
 		}catch(IOException e) {
 			log("error : "+e);
