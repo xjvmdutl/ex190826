@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class ChatClient {
 	private static String SERVER_IP="192.168.1.2";
-	private static int SERVER_PORT=8000;
+	private static int SERVER_PORT=5000;
 	public static void main(String[] args) {
 		Scanner sc = null;
 		Socket socket = null;
@@ -27,7 +27,13 @@ public class ChatClient {
 			pw.println("join:"+nickname);
 			pw.flush();
 			new ChatClientThread(socket,br).start();
+			
 			while(true) {
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 				System.out.print(">>");
 				String input = sc.nextLine();
 				if("quit".equals(input)) {
@@ -35,18 +41,20 @@ public class ChatClient {
 					break;
 				}else {
 					pw.println("message:"+input);
-					new ChatClientThread(socket,br).start();
+					continue;
 				}
 			}
 		}catch(IOException e) {
 			log("error : "+e);
 		}finally {
 			try {
-				socket.close();
+				if(socket!=null&&socket.isClosed()==false)
+					socket.close();
+				if(sc!=null)
+					sc.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			sc.close();
 		}
 	}
 	private static void log(String log) {

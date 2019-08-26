@@ -26,7 +26,6 @@ public class ChatServerThread extends Thread {
 				String request = br.readLine();
 				if(request==null) {
 					log("클라이언트로 부터 연결 끊김");
-					doQuit(pw);
 					break;
 				}
 				String[] tokens = request.split(":");
