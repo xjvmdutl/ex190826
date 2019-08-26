@@ -12,7 +12,7 @@ import java.util.List;
 public class ChatServerThread extends Thread {
 	private String nickname;
 	private Socket socket;
-	public List<PrintWriter> list;
+	private List<PrintWriter> list;
 	public ChatServerThread(Socket socket,List<PrintWriter> listWriters) {
 		this.socket=socket;
 		list =listWriters;
