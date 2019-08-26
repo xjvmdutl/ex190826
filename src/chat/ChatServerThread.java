@@ -72,7 +72,7 @@ public class ChatServerThread extends Thread {
 		synchronized(list) {
 			for(PrintWriter pw : list) {
 				pw.println(data);
-				pw.flush();
+				pw.flush(); 
 			}
 		}
 	}
