@@ -27,13 +27,12 @@ public class ChatClient {
 			pw.println("join:"+nickname);
 			pw.flush();
 			new ChatClientThread(socket,br).start();
-			
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			while(true) {
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
 				System.out.print(">>");
 				String input = sc.nextLine();
 				if("quit".equals(input)) {
