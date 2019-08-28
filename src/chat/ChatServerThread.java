@@ -24,17 +24,17 @@ public class ChatServerThread extends Thread {
 			PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(),"UTF-8"),true);
 			while(true) {
 				String request = br.readLine();
-				if(request==null) {
-					log("클라이언트로 부터 연결 끊김");
-					break;
-				}
+				
 				String[] tokens = request.split(":");
 				if("join".equals(tokens[0])) {
 					doJoin(tokens[1],pw);
-				}else if("message".equals(tokens[0])){
+					System.out.println(this.nickname+"이 참여하였습니다.");
+				}else if("message".equals(tokens[0])) {
 					doMessage(tokens[1]);
+					System.out.println(this.nickname+":"+tokens[1]);
 				}else if("quit".equals(tokens[0])) {
 					doQuit(pw);
+					System.out.println(this.nickname+"이 퇴장하셨습니다.");
 				}else {
 					ChatServer.log("error : 알수 없는 요청("+tokens[0]+")");
 				}
@@ -57,6 +57,7 @@ public class ChatServerThread extends Thread {
 	}
 	private void doJoin(String nickName,PrintWriter pw) {
 		this.nickname=nickName;
+		//전송 프로토콜
 		String data = nickname+"님이 참여하였숩나다";
 		broadcast(data);
 		addWriter(pw);
@@ -77,9 +78,10 @@ public class ChatServerThread extends Thread {
 		}
 	}
 	private void doMessage(String message) {
-		broadcast(message);
+		broadcast(this.nickname+":"+message);
 	}
 	private void doQuit(PrintWriter pw) {
+		pw.println("Bye");
 		removeWriter(pw);
 		String data = nickname+"님이 퇴장 하였습니다";
 		broadcast(data);
@@ -87,4 +89,5 @@ public class ChatServerThread extends Thread {
 	private void removeWriter(PrintWriter pw){
 		list.remove(pw);
 	}
+	
 }

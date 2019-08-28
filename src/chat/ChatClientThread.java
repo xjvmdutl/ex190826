@@ -20,10 +20,21 @@ public class ChatClientThread extends Thread {
 				if("join:ok".equals(message)) {
 					continue;
 				}
+				if("Bye".equals(message)) {
+					break;
+				}
 				System.out.println(message);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			if (this.socket != null && !this.socket.isClosed()) {
+				try {
+					this.socket.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 }
